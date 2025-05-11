@@ -1,1 +1,69 @@
+# claw/control/ps5_claw.py
+
+import time
+import RPi.GPIO as GPIO
+import pygame
+
+# ——— Servo setup ———
+PWM_PIN      = 18    # BCM pin your servo is wired to
+OPEN_ANGLE   =  10   # adjust until fully open
+CLOSED_ANGLE=  90   # adjust until fully closed
+FREQ         =  50   # 50Hz for hobby servos
+
+def angle_to_duty(angle):
+    """Map 0–180° to ~2–12% duty cycle."""
+    return 2 + (angle / 18)
+
+def set_servo(angle):
+    duty = angle_to_duty(angle)
+    pwm.ChangeDutyCycle(duty)
+    time.sleep(0.3)
+    pwm.ChangeDutyCycle(0)
+
+# ——— Init GPIO & PWM ———
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PWM_PIN, GPIO.OUT)
+pwm = GPIO.PWM(PWM_PIN, FREQ)
+pwm.start(0)
+time.sleep(0.1)
+
+# ——— Init pygame joystick ———
+pygame.init()
+pygame.joystick.init()
+if pygame.joystick.get_count() == 0:
+    print("No joystick detected! Connect your PS5 controller and try again.")
+    GPIO.cleanup()
+    exit(1)
+
+joy = pygame.joystick.Joystick(0)
+joy.init()
+print("Controller found:", joy.get_name())
+
+# Button mapping (pygame):
+#   0 = □, 1 = ✖ (cross), 2 = ◯ (circle), 3 = △
+BTN_CROSS  = 1
+BTN_CIRCLE = 2
+
+print("Press ◯ to CLOSE, ✖ to OPEN. Ctrl+C to quit.")
+
+try:
+    while True:
+        for e in pygame.event.get():
+            if e.type == pygame.JOYBUTTONDOWN:
+                if e.button == BTN_CIRCLE:
+                    print("Closing claw…")
+                    set_servo(CLOSED_ANGLE)
+                elif e.button == BTN_CROSS:
+                    print("Opening claw…")
+                    set_servo(OPEN_ANGLE)
+        # tiny delay so this loop isn't 100% CPU
+        time.sleep(0.01)
+
+except KeyboardInterrupt:
+    print("\nExiting…")
+
+finally:
+    pwm.stop()
+    GPIO.cleanup()
+    pygame.quit()
 
