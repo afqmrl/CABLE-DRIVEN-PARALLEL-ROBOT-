@@ -5,9 +5,9 @@
 ## 📂 Project Structure
 
 - **robot/**  
-  - `control/` – motion planning & kinematics  
-  - `gui/` – visualization & user interface  
-  - `force_reader/` – sensor data acquisition  
+  - `Main_Code/` – motion planning & kinematics  
+  - `GUI/` – visualization & user interface  
+  - `Force_Reader/` – sensor data acquisition  
 - **eeg/**  
   - `data/` – raw & processed signals  
   - `processing/` – filtering, artifact removal  
