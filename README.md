@@ -26,9 +26,9 @@
    cd CABLE-DRIVEN-PARALLEL-ROBOT-
 
 ## Group Member
-- **Avishai Wynne/**
-- **Amirul Afiq/**
-- **Jai Bolton/**
-- **Sadikul Islam/**
+- **Avishai Wynne**
+- **Amirul Afiq**
+- **Jai Bolton**
+- **Sadikul Islam**
 - **Khairul Anuar/**
 
