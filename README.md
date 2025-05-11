@@ -30,5 +30,5 @@
 - **Amirul Afiq**
 - **Jai Bolton**
 - **Sadikul Islam**
-- **Khairul Anuar/**
+- **Khairul Anuar**
 
