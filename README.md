@@ -6,15 +6,15 @@
 
 ## 📂 Project Structure
 
-- **robot/**  
+- **Robot/**  
   - `Main_Code/` – motion planning & kinematics  
   - `GUI/` – visualization & user interface  
   - `Force_Reader/` – sensor data acquisition  
-- **eeg/**  
+- **EEG/**  
   - `data/` – raw & processed signals  
   - `processing/` – filtering, artifact removal  
   - `utils/` – EEG helper functions  
-- **claw/**  
+- **Claw/**  
   - `control/` – claw actuation logic  
   - `utils/` – claw utilities  
 - **docs/** – design docs & hardware specs  
