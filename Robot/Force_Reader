@@ -1,1 +1,115 @@
+#!/usr/bin/env python
+import serial
+import time
+import json
+import os
+import numpy as np
+
+HISTORY_LENGTH = 100
+FILTER_ALPHA = 1
+
+# Load cell calibration factors (raw to grams)
+calibration_factors = np.array([
+    0.005915401, 0.005695078, 0.005452689, 0.00591456,
+    0.005812267, 0.029105374, 0.005115862, 0.022304154
+])
+
+# Initialize buffers
+zero_offsets = np.zeros(8)
+filtered_values = None  # will initialize after first sample
+
+# Load initial tensions from file
+initial_tensions = np.zeros(8)
+if os.path.exists("initial_tensions.json"):
+    try:
+        with open("initial_tensions.json", "r") as f:
+            data = json.load(f)
+        initial_tensions = np.array(data, dtype=float)
+        print("▶︎ Loaded initial tensions from JSON:", np.round(initial_tensions, 1))
+    except Exception as e:
+        print("⚠️ Failed to load initial_tensions.json:", e)
+else:
+    print("⚠️ initial_tensions.json not found, using zeros as fallback.")
+
+def read_force_data(port="COM8", baudrate=230400):
+    global zero_offsets, filtered_values
+    history = {}
+
+    if os.path.exists("force_data.json"):
+        try:
+            with open("force_data.json", "r") as f:
+                history = json.load(f)
+            if not isinstance(history, dict):
+                history = {}
+            else:
+                for key in list(history.keys()):
+                    if not isinstance(history[key], list):
+                        history[key] = [history[key]]
+        except Exception:
+            history = {}
+
+    try:
+        ser = serial.Serial(port, baudrate, timeout=1)
+        print(f"✅ Opened serial port {port} at {baudrate} baud.")
+    except Exception as e:
+        print("❌ Error opening serial port:", e)
+        return
+
+    first_sample = True
+
+    while True:
+        try:
+            line = ser.readline().decode('utf-8', errors='ignore').strip()
+            if line.startswith("----------"):
+                sample_raw = []
+                sample_keys = []
+
+                for _ in range(8):
+                    line = ser.readline().decode('utf-8', errors='ignore').strip()
+                    if line:
+                        parts = line.split(":")
+                        if len(parts) == 2:
+                            key = parts[0].strip().replace(",", "").replace(" ", "_")
+                            try:
+                                value = float(parts[1].strip())
+                            except ValueError:
+                                value = 0.0
+                            sample_keys.append(key)
+                            sample_raw.append(value)
+
+                if len(sample_raw) == 8:
+                    raw_array = np.array(sample_raw)
+
+                    if first_sample:
+                        zero_offsets = raw_array.copy()
+                        filtered_values = initial_tensions.copy()
+                        first_sample = False
+                        print("✅ Zero offsets captured:", np.round(zero_offsets, 1))
+                        print("✅ Filter initialized to:", np.round(filtered_values, 1))
+
+                    corrected = raw_array - zero_offsets
+                    calibrated = corrected * calibration_factors + initial_tensions
+
+                    filtered_values = (1 - FILTER_ALPHA) * filtered_values + FILTER_ALPHA * calibrated
+                    calibrated_sample = {k: float(v) for k, v in zip(sample_keys, filtered_values)}
+
+                    for key, value in calibrated_sample.items():
+                        if key not in history:
+                            history[key] = []
+                        elif not isinstance(history[key], list):
+                            history[key] = [history[key]]
+                        history[key].append(value)
+                        if len(history[key]) > HISTORY_LENGTH:
+                            history[key] = history[key][-HISTORY_LENGTH:]
+
+                    with open("force_data.json", "w") as f:
+                        json.dump(history, f)
+
+            time.sleep(0.01)
+        except Exception as e:
+            print("❗ Error reading force data:", e)
+            time.sleep(1)
+
+if __name__ == "__main__":
+    read_force_data()
 
