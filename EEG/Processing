@@ -1,1 +1,53 @@
+import numpy as np
+from scipy.signal import butter, filtfilt, welch, iirnotch
+from brainflow.board_shim import BoardShim, BrainFlowInputParams
+from datetime import datetime
 
+# --- Setup OpenBCI board via BrainFlow ---
+params = BrainFlowInputParams()
+params.port = '/dev/ttyUSB0'  
+board = BoardShim(BoardShim.CYTON_BOARD, params)
+board.prepare_session()
+board.start_stream()
+
+print("[INFO] EEG stress detection started. Press Ctrl+C to stop.")
+
+# --- Design filters ---
+fs = 250  # sampling rate
+# Notch filter at 50Hz
+b_notch, a_notch = iirnotch(50.0, 30.0, fs)
+# Band-pass 1–50 Hz
+b_band, a_band = butter(4, [1/ (fs/2), 50/ (fs/2)], btype='band')
+
+# --- Data buffer for 1-second window ---
+buffer = np.zeros((8, fs))
+
+try:
+    while True:
+        # Read the latest sample from 8 channels
+        data = board.get_board_data()[-8:, -1]
+
+        # Shift buffer and append new sample
+        buffer = np.roll(buffer, -1, axis=1)
+        filtered = filtfilt(b_notch, a_notch,
+                            filtfilt(b_band, a_band, data))
+        buffer[:, -1] = filtered
+
+        # Once buffer is full, compute PSD
+        if buffer.shape[1] == fs:
+            f, Pxx = welch(buffer, fs=fs, nperseg=fs)
+            alpha = np.mean(Pxx[:, (f >= 8) & (f <= 13)], axis=1)
+            beta  = np.mean(Pxx[:, (f >= 13) & (f <= 30)], axis=1)
+            ratio = np.mean(beta / alpha)
+
+            print(f"[DEBUG] Stress ratio: {ratio:.2f}")
+
+            # Threshold for stress detection
+            if ratio > 1.2:
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                print(f"[ALERT] Stress event detected at {timestamp}")
+
+finally:
+    board.stop_stream()
+    board.release_session()
+    print("[INFO] EEG stress detection stopped.")
