@@ -1,6 +1,7 @@
 # Cable-Driven Parallel Robot (GROUP 7)
 
 **A modular framework** for controlling a cable-driven parallel robot, with EEG integration and an end-effector claw.
+![cdpr](https://github.com/user-attachments/assets/b988b011-0617-4479-93ce-cf66e94fe6da)
 
 ## 📂 Project Structure
 
