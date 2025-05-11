@@ -1,4 +1,4 @@
-# Cable-Driven Parallel Robot
+# Cable-Driven Parallel Robot (GROUP 7)
 
 **A modular framework** for controlling a cable-driven parallel robot, with EEG integration and an end-effector claw.
 
@@ -24,3 +24,11 @@
    ```bash
    git clone https://github.com/afqmrl/CABLE-DRIVEN-PARALLEL-ROBOT-.git
    cd CABLE-DRIVEN-PARALLEL-ROBOT-
+
+## Group Member
+-Avishai Wynne
+-Amirul Afiq
+-Jai Bolton
+-Sadikul Islam
+-Khairul Anuar
+
