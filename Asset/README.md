@@ -5,7 +5,7 @@ This folder is used to organize external and supporting resources for the Cable-
 ## 📁 Subdirectories
 
 - **assets/**  
-  General-purpose resources such as images, tag templates, or visual assets.  
+  Claw architecture to be used with MuJoCo simulation  
 
 - **scservo_sdk/**  
   Contains SDK libraries and scripts for interfacing with SCServo motors. Useful for initializing, controlling, or reading feedback from Dynamixel-style servo motors.  
