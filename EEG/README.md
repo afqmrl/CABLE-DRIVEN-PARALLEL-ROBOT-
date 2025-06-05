@@ -17,10 +17,6 @@
   - FFT / PSD (power spectral density)
   - Bandpower ratio (alpha/beta, etc.)
 
-### 🔹 `utils/`
-- Utility functions to support loading `.mat` files, labeling data, or visualizing EEG signals
-- Reusable code shared across `processing/` and `Simulated/` modules
-
 ### 🔹 `Simulated/EEGSignalRPi.py`
 - Simulates EEG output by sending a PWM signal from a Raspberry Pi
 - Selects a random `.mat` file representing either a relaxed or stressed state
