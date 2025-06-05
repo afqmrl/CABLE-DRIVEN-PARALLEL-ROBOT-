@@ -1,8 +1,31 @@
-1) Need to be in the Python virtual environment
-2) Activate the environment:
+
+---
+
+## 📝 Script Overview
+
+### `Apriltags6.py`
+- **Main script for AprilTag detection**
+- Detects AprilTags in a live camera feed using OpenCV and the AprilTag library
+- Prints tag IDs and poses to the console
+- Displays video output with tag overlays
+
+### `calibration.py`
+- **Performs camera calibration**
+- Loads checkerboard images captured via `getImages.py`
+- Generates and saves camera matrix and distortion coefficients
+- Required before running `Apriltags6.py`
+
+### `getImages.py`
+- **Captures checkerboard images for calibration**
+- Saves multiple images from a camera feed
+- User moves the checkerboard to different angles/distances
+- Outputs are used by `calibration.py`
+
+---
+
+## ⚙️ How to Use
+
+1. **Activate the Python virtual environment**  
+   ```bash
    source ~/Desktop/CDPR/Environment/bin/activate
-3) Check current working directory:
-   It should be /home/group7_rpi/Desktop/CDPR/APRIL_TAG_PI
-4) Apriltags6.py is the main detection script for identifying AprilTags using the calibrated camera
-5) calibration.py is used to perform camera calibration and save the calibration matrices
-6) getImages.py is used to capture checkerboard images needed for camera calibration
+
