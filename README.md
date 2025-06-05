@@ -6,26 +6,38 @@
 
 ## 📂 Project Structure
 
+- **Asset/**  
+  - `assets/`           ← Placeholder directory for general assets (e.g., images, models)  
+  - `scservo_sdk/`      ← SDK files for Dynamixel SCServo, ready for integration  
+  - `sms_sts/`          ← Scripts or data for SMS-based subsystem testing  
+  - `saved_commands/`   ← Pre-recorded or canned command files for replay/testing  
+  > **Note:** Each subfolder under **Asset/** contains a `.gitkeep` so Git can track an otherwise empty directory. Replace or delete the `.gitkeep` once you add real content.
+
 - **Robot/**  
-  - `Main_Code/` – motion planning & kinematics  
-  - `GUI/` – visualization & user interface  
-  - `Force_Reader/` – sensor data acquisition  
+  - `Main_Code/`        – (Refactored/DELETED) motion planning & kinematics  
+  - `GUI/`              – (Refactored/DELETED) visualization & user interface  
+  - `Force_Reader/`     – (Refactored/DELETED) sensor data acquisition  
+
 - **EEG/**  
-  - `data/` – raw & processed signals  
-  - `processing/` – filtering, artifact removal  
-  - `utils/` – EEG helper functions  
+  - `data/`             – Raw & processed EEG `.mat` files  
+  - `processing/`       – Filtering, artifact removal scripts  
+  - `utils/`            – EEG helper functions  
+  - `Simulated/`        – (Since June 5, 2025) Simulated EEG signal generator for Raspberry Pi  
+
 - **Claw/**  
-  - `control/` – claw actuation logic  
-  - `utils/` – claw utilities  
-- **docs/** – design docs & hardware specs  
-- **tests/** – unit & integration tests  
+  - `control/`          – Claw actuation logic (motor commands, state management)  
+  - `utils/`            – Claw subsystem utility functions  
+
+- **docs/**             – Design docs & hardware specs  
+- **tests/**            – Unit & integration tests  
+- **README.md**         – This file  
 
 ## 🚀 Getting Started
 
 1. Clone the repo  
    ```bash
    git clone https://github.com/afqmrl/CABLE-DRIVEN-PARALLEL-ROBOT-.git
-   cd CABLE-DRIVEN-PARALLEL-ROBOT-
+
 
 ## Group Member
 - **Avishai Wynne**
