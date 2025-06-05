@@ -8,21 +8,20 @@
 
 - **Asset/**  
   - `assets/`           ← Placeholder directory for general assets (e.g., images, models)  
-  - `scservo_sdk/`      ← SDK files for Dynamixel SCServo, ready for integration  
-  - `sms_sts/`          ← Scripts or data for SMS-based subsystem testing  
-  - `saved_commands/`   ← Pre-recorded or canned command files for replay/testing  
-  > **Note:** Each subfolder under **Asset/** contains a `.gitkeep` so Git can track an otherwise empty directory. Replace or delete the `.gitkeep` once you add real content.
+  - `scservo_sdk/`      ← SDK files for SCServo, ready for integration  
+  - `sms_sts/`          ← For SMS-based servo  
+  - `saved_commands/`   ← Pre-recorded command files for predefined trajectories  
+  > **Note:** Each subfolder under **Asset/** contains a `.gitkeep` so Git can track an otherwise empty directory. 
 
 - **Robot/**  
-  - `Main_Code/`        – (Refactored/DELETED) motion planning & kinematics  
-  - `GUI/`              – (Refactored/DELETED) visualization & user interface  
-  - `Force_Reader/`     – (Refactored/DELETED) sensor data acquisition  
+  - `Main_Code/`        – Main control of the robot
+  - `GUI/`              – Visualization & user interface  
+  - `Force_Reader/`     – Sensor data acquisition  
 
 - **EEG/**  
-  - `data/`             – Raw & processed EEG `.mat` files  
+  - `Main/`             – Raw & processed EEG `.mat` files  
   - `processing/`       – Filtering, artifact removal scripts  
-  - `utils/`            – EEG helper functions  
-  - `Simulated/`        – (Since June 5, 2025) Simulated EEG signal generator for Raspberry Pi  
+  - `Simulated/`        – Simulated EEG signal generator for Raspberry Pi  
 
 - **Claw/**  
   - `control/`          – Claw actuation logic (motor commands, state management)  
